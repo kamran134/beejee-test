@@ -1,23 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { getTasks, editTask } from '../redux/actions/task-action';
 import queryString from 'query-string';
 import './main.css';
 
-const Main = (props) => {
+const Main = props => {
     const history = useHistory();
+    const dispatch = useDispatch();
     const [sortDirection, setSortDirection] = useState({
         id: true,
         username: true,
         email: true,
         status: true
-    })
-    useEffect((props) => {
-        const parsed = queryString.parse(props.location.search);
-        props.getTasks({page: parsed.page});
-    }, []);
-
+    });
+    const { search } = props.location;
+    
+    useEffect(() => {
+        const parsed = queryString.parse(search);
+        dispatch(getTasks({page: parsed.page}));
+    }, [dispatch, search]);
+    
     const sortHandler = async (field) => {
         const direction = sortDirection[field];
         console.log('direction', direction)
