@@ -13,7 +13,7 @@ const Main = (props) => {
         email: true,
         status: true
     })
-    useEffect(() => {
+    useEffect((props) => {
         const parsed = queryString.parse(props.location.search);
         props.getTasks({page: parsed.page});
     }, []);
