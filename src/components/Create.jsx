@@ -49,7 +49,7 @@ const CreateForm = props => {
     }
 
     const validation = () => {
-        const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
+        const emailRegex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g;
         let validationState = true;
         let validationStrings = {
             username: null,
