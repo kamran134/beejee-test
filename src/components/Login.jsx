@@ -14,7 +14,7 @@ const Login = props => {
     const formSubmitHandler = async e => {
         e.preventDefault();
         await props.login(form);
-        history.push('/')
+        history.push('/');
     }
 
     const fieldChangeHandler = e => {

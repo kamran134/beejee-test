@@ -1,32 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import { connect, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import { getTasks, editTask } from '../redux/actions/task-action';
+import { sortTask } from '../redux/actions/sort-action';
 import queryString from 'query-string';
 import './main.css';
 
 const Main = props => {
+    const { search } = props.location;
     const history = useHistory();
     const dispatch = useDispatch();
+    const [sortField, setSortField] = useState(props.sortParams.field || 'id');
     const [sortDirection, setSortDirection] = useState({
         id: true,
         username: true,
         email: true,
         status: true
     });
-    const { search } = props.location;
     
+    if (search.asc) setSortDirection({...sortDirection, [sortField]: props.sortParams.direction});
+
     useEffect(() => {
         const parsed = queryString.parse(search);
-        dispatch(getTasks({page: parsed.page}));
-    }, [dispatch, search]);
+        dispatch(getTasks({page: parsed.page, field: sortField, direction: sortDirection[sortField]}));
+    }, [dispatch, search, sortField, sortDirection]);
     
     const sortHandler = async (field) => {
-        const direction = sortDirection[field];
-        console.log('direction', direction)
         const parsed = queryString.parse(props.location.search);
-        await props.getTasks({page: parsed.page, field, direction});
-        setSortDirection({...sortDirection, [field]: !direction});
+        setSortField(field);
+        await props.sortTask(field, sortDirection[field]);
+        await props.getTasks({page: parsed.page, field: props.sortParams.field, direction: props.sortParams.direction});
+        setSortDirection({...sortDirection, [field]: !sortDirection[field]});
     }
 
     return (
@@ -55,7 +59,10 @@ const Main = props => {
                     ))}
                 </div>
                 <div className='pagination-block'>
-                    {props.tasksObject.total_task_count && <Pagination count={props.tasksObject.total_task_count} />}
+                    {props.tasksObject.total_task_count && 
+                        <Pagination 
+                            count={props.tasksObject.total_task_count}
+                        />}
                 </div>
             </div>
         </div>
@@ -138,19 +145,21 @@ const Pagination = ({count}) => {
     let paginationLinks = [];
 
     for (let n = 1; n <= pageCount; n++) {
-        paginationLinks.push(<a key={n} href={`/?page=${n}`}>{n}</a>);
+        paginationLinks.push(<Link key={n} to={`/?page=${n}`}>{n}</Link>);
     }
     return <div className='pagination'>{paginationLinks}</div>;
 }
 
 const mapStateToProps = state => ({
     tasksObject: state.taskReducer,
-    auth: state.authReducer
+    auth: state.authReducer,
+    sortParams: state.sortReducer
 });
 
 const mapDispatchToProps = {
     getTasks,
-    editTask
+    editTask,
+    sortTask
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main)

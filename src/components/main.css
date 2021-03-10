@@ -23,7 +23,7 @@ header {
     border: 1px solid rgba(0, 0, 0, 0.16);
     padding: 20px;
     width: 100%;
-    height: 200px;
+    min-height: 200px;
     margin-bottom: 20px;
 }
 
@@ -33,12 +33,29 @@ header {
 
 .task div {
     display: flex;
+    margin-bottom: 10px;
+}
+
+.task div strong {
+    margin-right: 5px;
+    width: 70px;
 }
 
 .create-task-field {
     margin-bottom: 20px;
     display: flex;
     align-items: flex-start;
+    position: relative;
+}
+
+.error-message {
+    position: absolute;
+    font-size: 12px;
+    bottom: -6px;
+    left: 160px;
+    color: #ff0000;
+    padding: 0 3px;
+    background-color: #fff;
 }
 
 .create-task-field label {

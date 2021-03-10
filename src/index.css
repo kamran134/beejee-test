@@ -46,3 +46,22 @@ code {
 .btn-blue:hover {
     background-color: #60a9e4;
 }
+
+input[type='text'],
+input[type='password'] {
+    width: 200px;
+    height: 30px;
+    border-radius: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.16);
+    outline: none;
+    padding: 0 10px;
+}
+
+textarea {
+    width: 200px;
+    height: 100px;
+    border-radius: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.16);
+    outline: none;
+    padding: 10px;
+}

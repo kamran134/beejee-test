@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { LOGIN } from '../action-types';
+import { LOGIN, LOGOUT } from '../action-types';
 
 const _login = user => ({
     type: LOGIN,
@@ -7,7 +7,6 @@ const _login = user => ({
 })
 
 export const login = (form) => dispatch => {
-    console.log('form', form);
     const formData = new FormData();
     formData.append('username', form.login);
     formData.append('password', form.password);
@@ -23,3 +22,9 @@ export const login = (form) => dispatch => {
             }
         });
 }
+
+export const logout = () => dispatch => (
+    dispatch({
+        type: LOGOUT
+    })
+)

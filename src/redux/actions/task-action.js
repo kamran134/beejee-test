@@ -1,7 +1,7 @@
 import axios from "axios";
 import { GET_TASKS } from "../action-types";
 
-export const createTask = (form) => dispatch => {
+export const createTask = (form) => async() => {
     const formData = new FormData();
     formData.append('username', form.username);
     formData.append('email', form.email);
@@ -13,14 +13,16 @@ export const createTask = (form) => dispatch => {
             headers: { "Content-Type": "multipart/form-data" }
         })
         .then(({ data }) => {
-            if (data.status === 'ok') return getTasks();
+            if (data.status === 'ok') {
+                return alert('Задача добавлена успешно!');
+            }
         });
 }
 
 const _getTasks = tasks => ({
     type: GET_TASKS,
     payload: tasks
-})
+});
 
 export const getTasks = (params) => dispatch => {
     const sort_direction = !params.direction ? 'desc' : 'asc';
@@ -35,7 +37,7 @@ export const editTask = (id, token, form) => dispatch => {
     formData.append('token', token);
     formData.append('text', form.text);
     formData.append('status', form.status);
-    return axios({
+    if (localStorage.getItem('beejee.token')) return axios({
             method: 'post',
             url: `https://uxcandy.com/~shapoval/test-task-backend/v2/edit/${id}?developer=Kazimi`,
             data: formData,
@@ -44,4 +46,5 @@ export const editTask = (id, token, form) => dispatch => {
         .then(({ data }) => {
             if (data.status === 'ok') return getTasks();
         });
+    else alert('Вы не авторизованы');
 }
